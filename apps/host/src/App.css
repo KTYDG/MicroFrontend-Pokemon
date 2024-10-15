@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  color: #fff;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  background-image: linear-gradient(to bottom, #020917, #101725);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+.content {
+  display: flex;
+  min-height: 100vh;
+  gap: 10px;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content h1 {
+  font-size: 3.6rem;
+  font-weight: 700;
+}
+.content h2 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+.content p {
+  font-size: 28px;
+  font-weight: 400;
+  opacity: 0.4;
+}
+
+.content label {
+  font-size: 30px;
+  font-weight: 400;
+}
