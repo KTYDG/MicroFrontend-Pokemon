@@ -15,9 +15,21 @@ export default defineConfig({
   plugins: [pluginReact()],
   server: {
     port: 3000,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      'X-Content-Type-Options': 'text/javascript, text/css'
+    }
+  },
+  dev: {
+    assetPrefix: `http://localhost:3000`,
   },
   output: {
-    assetPrefix: '/',
+    distPath: process.env.GITHUB ? {
+      root: '../dist'
+    } : undefined,
+    assetPrefix: process.env.GITHUB ?? 'http://localhost:3000',
     filenameHash: true,
   },
   tools: {
@@ -32,8 +44,12 @@ export default defineConfig({
         new ModuleFederationPlugin({
           name: 'rspack-host',
           remotes: {
-            '@remote_1': 'remote_app_list@http://localhost:3001/mf-manifest.json',
-            '@remote_2': 'remote_app_view@http://localhost:3002/mf-manifest.json',
+            '@remote_1': process.env.GITHUB ?
+              'remote_app_view@apps/remote_app_list/mf-manifest.json' :
+              'remote_app_list@http://localhost:3001/mf-manifest.json',
+            '@remote_2': process.env.GITHUB ?
+              'remote_app_view@apps/remote_app_view/mf-manifest.json' :
+              'remote_app_view@http://localhost:3002/mf-manifest.json',
           },
           // runtimePlugins: [path.resolve(__dirname, 'shared-strategy.ts')],
           shared: makeShared(),

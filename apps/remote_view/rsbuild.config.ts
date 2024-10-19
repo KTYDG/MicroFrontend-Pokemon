@@ -16,12 +16,21 @@ export default defineConfig({
   plugins: [pluginReact()],
   server: {
     port: 3002,
+      headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      'X-Content-Type-Options': 'text/javascript, text/css'
+    }
   },
   dev: {
     assetPrefix: `http://localhost:3002`,
   },
   output: {
-    assetPrefix: '/',
+    distPath: process.env.GITHUB ? {
+      root: '../dist/apps/remote_app_view'
+    } : undefined,
+    assetPrefix: 'http://localhost:3002',
     filenameHash: true,
   },
   tools: {
@@ -38,7 +47,9 @@ export default defineConfig({
             './Remote': './src/components/Remote.tsx',
           },
           remotes: {
-            '@remote_1': 'remote_app_list@http://localhost:3001/mf-manifest.json',
+            '@remote_1': process.env.GITHUB ?
+              'remote_app_view@../remote_app_list/mf-manifest.json' :
+              'remote_app_list@http://localhost:3001/mf-manifest.json',
           },
           shared: makeShared(),
         }),

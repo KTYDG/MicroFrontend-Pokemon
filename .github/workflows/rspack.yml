@@ -1,0 +1,62 @@
+name: NodeJS with Rspack
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      GITHUB: https://ktydg.github.io/MicroFrontend-Pokemon/
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.7.0
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build everything
+        run: pnpm build
+      # - name: Start preview
+      #   run: pnpm preview &
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      # - name: Upload artifact remote_list
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: './apps/remote_list/dist'
+      # - name: Upload artifact remote_view
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     name: 'remote_view'
+      #     path: './apps/remote_view/dist'
+      - name: Upload artifact host
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './apps/dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

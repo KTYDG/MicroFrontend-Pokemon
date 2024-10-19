@@ -15,12 +15,21 @@ export default defineConfig({
   plugins: [pluginReact()],
   server: {
     port: 3001,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      'X-Content-Type-Options': 'text/javascript, text/css'
+    }
   },
   dev: {
     assetPrefix: `http://localhost:3001`,
   },
   output: {
-    assetPrefix: '/',
+    distPath: process.env.GITHUB ? {
+      root: '../dist/apps/remote_app_list'
+    } : undefined,
+    assetPrefix: 'http://localhost:3001',
     filenameHash: true,
   },
   tools: {
